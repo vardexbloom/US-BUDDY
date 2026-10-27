@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your AI</title>
+<style>
+:root{--bg:#f7f8f6;--sf:#fff;--hv:#eff2ed;--tx:#20251f;--mu:#727970;--bd:#e1e5de;--ac:#315e48;--on:#fff;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#151815;--sf:#1d211d;--hv:#292e29;--tx:#edf0eb;--mu:#a0a79e;--bd:#353b34;--ac:#9bc9a8;--on:#151815;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#151815;--sf:#1d211d;--hv:#292e29;--tx:#edf0eb;--mu:#a0a79e;--bd:#353b34;--ac:#9bc9a8;--on:#151815;color-scheme:dark}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--tx);font:15px/1.6 Inter,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit;color:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}
+:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
+.app{display:flex;height:100%}
+aside{width:240px;flex:none;background:var(--sf);border-right:1px solid var(--bd);padding:16px;display:flex;flex-direction:column;gap:4px}
+.logo{font-weight:600;padding:4px 8px 16px}
+.nav{background:none;border:0;text-align:left;padding:10px 12px;border-radius:12px;color:var(--mu)}
+.nav:hover{background:var(--hv)}.nav[aria-current=page]{background:var(--hv);color:var(--tx);font-weight:500}
+main{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column}
+header{height:56px;flex:none;display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid var(--bd);font-weight:500}
+header .sp{flex:1}.menu{display:none}
+.cw{flex:1;min-height:0;display:flex;flex-direction:column}
+.pg{flex:1;min-height:0;overflow:auto;padding:24px 16px}
+.col{max-width:760px;margin:0 auto;width:100%}
+h1{font-size:34px;font-weight:500;letter-spacing:-.02em;margin:8px 0 8px;line-height:1.2}
+h2{font-size:22px;margin:0 0 8px}h4{margin:16px 0 4px;font-size:15px}
+.mu{color:var(--mu);font-size:14px}.sm{font-size:13px}
+.msg{margin:0 0 24px;line-height:1.7;font-size:16px}
+.msg.u{background:var(--hv);border-radius:16px;padding:10px 16px;width:fit-content;max-width:85%;margin-left:auto;white-space:pre-wrap}
+.msg p{margin:0 0 12px}.msg ul{margin:0 0 12px;padding-left:22px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 0}
+.chips button,.btn{border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:6px 14px;font-size:14px}
+.chips button:hover,.btn:hover{background:var(--hv)}
+.btn.pri{background:var(--ac);border-color:var(--ac);color:var(--on);font-weight:500}.btn.pri:hover{opacity:.9;background:var(--ac)}
+.fu{border:1px solid var(--bd);background:var(--sf);border-radius:16px;padding:12px 16px;margin:-8px 0 24px}
+.note{border:1px solid var(--bd);background:var(--sf);border-radius:16px;padding:12px 16px;margin:0 0 24px;font-size:14px}
+.comp{flex:none;padding:8px 16px 16px}
+.comp form{border:1px solid var(--bd);background:var(--sf);border-radius:18px;padding:10px 12px;transition:border-color .15s}
+.comp form:focus-within{border-color:var(--ac)}
+textarea,input,select{background:transparent;border:1px solid var(--bd);border-radius:10px;padding:8px 10px;width:100%}
+.comp textarea{border:0;resize:none;padding:4px;outline:none}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px}
+.send{width:40px;height:40px;border-radius:12px;border:0;background:var(--ac);color:var(--on);font-size:18px}
+.card{border:1px solid var(--bd);background:var(--sf);border-radius:16px;padding:14px 16px;margin:0 0 12px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row .grow{flex:1;min-width:140px}
+label{display:block;font-size:13px;color:var(--mu);margin:12px 0 4px}
+.tabs{display:flex;gap:8px;margin:0 0 16px}.tabs .btn[aria-pressed=true]{background:var(--hv);font-weight:500}
+.ov{position:fixed;inset:0;background:rgb(0 0 0/.4);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal{background:var(--sf);border:1px solid var(--bd);border-radius:20px;padding:20px;max-width:520px;width:100%;max-height:100%;overflow:auto;box-shadow:0 8px 28px rgb(0 0 0/.15)}
+dl{margin:12px 0}dt{font-size:12px;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;margin-top:10px}dd{margin:2px 0 0}
+.draft{background:var(--hv);border-radius:10px;padding:10px 12px;white-space:pre-wrap}
+.modal .row{justify-content:flex-end;margin-top:16px}
+@media(max-width:760px){aside{position:fixed;inset:0 auto 0 0;z-index:30;transform:translateX(-100%);transition:transform .15s}aside.open{transform:none}.menu{display:inline-block}header{padding:0 12px}h1{font-size:28px}.scrim{position:fixed;inset:0;background:rgb(0 0 0/.3);z-index:20;border:0}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head>
+<body><div id="root"></div>
+<script>
+const $=s=>document.querySelector(s),uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const hash=s=>{let h=5381;for(const c of s)h=(h*33^c.charCodeAt(0))>>>0;return h.toString(36)};
+function md(s){let u=0;const o=[];esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").split("\n").forEach(l=>{const m=l.match(/^\s*(?:[-*]|\d+\.)\s+(.*)/);if(m){if(!u){o.push("<ul>");u=1}o.push("<li>"+m[1]+"</li>")}else{if(u){o.push("</ul>");u=0}const h=l.match(/^#{1,4}\s+(.*)/);o.push(h?"<h4>"+h[1]+"</h4>":l.trim()?"<p>"+l+"</p>":"")}});if(u)o.push("</ul>");return o.join("")}
+const D={profile:{done:false,name:"",style:"balanced",goals:"",tz:Intl.DateTimeFormat().resolvedOptions().timeZone,qs:"22:00",qe:"07:00"},mem:[],tasks:[],notes:[],log:[],chat:[],open:false,theme:"auto"};
+let S=JSON.parse(JSON.stringify(D)),V={page:"chat",tab:"b",modal:null,edit:null,nav:false,busy:false,msg:"",reset:false},ref=null,tm;
+function save(){clearTimeout(tm);tm=setTimeout(async()=>{S.chat=S.chat.slice(-60);S.log=S.log.slice(0,100);const d=JSON.parse(JSON.stringify(S));try{localStorage.setItem("yai",JSON.stringify(d))}catch(e){}if(ref)try{await ref.set(d)}catch(e){}},400)}
+async function load(){try{const u=await claude.use("user"),id=u&&await u.id(),db=await claude.use("db");if(db&&id){ref=db.collection("data/users/"+id).doc("state");const s=await ref.get();if(s.exists)return s.data()}}catch(e){}try{return JSON.parse(localStorage.getItem("yai")||"null")}catch(e){return null}}
+const log=a=>S.log.unshift({t:Date.now(),a});
+const SYS=`You are “Your AI”, a personal assistant inside a web app. Rules:
+1. Answer the user’s question directly first.
+2. Then, only if it adds real value, give ONE optional follow-up (“followup”) plus up to 3 short chips (“chips”). Never interview the user.
+3. If the user writes “explain” (or “go deeper”, “tell me more”), expand your previous answer comprehensively: short headings, examples, assumptions, and what you don’t know. If they ask for short, be short.
+4. You have NO access to files, messages, apps or the internet. Never claim to have read or sent anything. If a task needs private data, return action {"type":"read_data","source":"...","why":"..."}. If the user wants a message sent or something changed externally, draft it and return action {"type":"send_message","to":"...","body":"..."}; the app asks the user to approve.
+5. If active projects are listed and the message is completely unrelated to them (and scope checking is on), return scope "out" with a one-line answer; otherwise scope "in".
+6. Don’t invent facts; say when you are unsure or when current data would be needed.
+7. If you learn a durable preference worth remembering, put it in “memory” (the user must approve it), else null.
+Reply with ONLY JSON: {"scope":"in"|"out","answer":string,"followup":string|null,"chips":string[],"action":object|null,"memory":string|null}. Use plain text with **bold**, “- ” lists and “## ” headings only.`;
+const BR=`Return ONLY JSON {"items":[{"title":string,"body":string}]} with 0–3 short, genuinely useful proactive suggestions based on the context below. Don’t invent facts or claim access to anything. Return {"items":[]} if there is no useful context.`;
+function ctx(){const p=S.profile;return `User: ${p.name||"unknown"}. Answer style: ${p.style}. Goals: ${p.goals||"not given"}.\nMemories: ${S.mem.filter(m=>m.on).map(m=>m.t).join("; ")||"none"}.\nActive projects: ${act().map(t=>t.title+(t.n?" ("+t.n+")":"")).join("; ")||"none"}.\nScope checking: ${S.open?"off for this thread":"on"}.`}
+const act=()=>S.tasks.filter(t=>t.on&&!t.done);
+async function ai(prompt){const sm=await claude.use("sample");if(!sm)throw 0;let r=await sm.json(prompt,{cache:false});if(typeof r=="string")r=JSON.parse(r.replace(/```json|```/g,""));return r}
+async function send(text){text=(text||"").trim();if(!text||V.busy)return;V.busy=true;S.chat=S.chat.filter(m=>m.r!="o");S.chat.push({r:"u",t:text});view();
+try{const h=S.chat.slice(-11,-1).filter(m=>m.r=="u"||m.r=="a").map(m=>(m.r=="u"?"User: ":"Assistant: ")+m.t).join("\n");
+const r=await ai(`${SYS}\n\n${ctx()}\n\nConversation so far:\n${h||"(none)"}\n\nUser: ${text}`);
+if(r.scope=="out"&&act().length&&!S.open)S.chat.push({r:"o",q:text});
+else{S.chat.push({r:"a",t:String(r.answer||""),f:r.followup||"",c:(r.chips||[]).slice(0,3),mem:r.memory||"",x:/^\s*(explain|go deeper)/i.test(text)});
+const a=r.action;if(a&&a.type=="send_message")V.modal={type:"send_message",to:String(a.to||""),body:String(a.body||""),edit:false,h:hash(a.to+"|"+a.body)};else if(a&&a.type=="read_data")V.modal={type:"read_data",source:String(a.source||"your data"),why:String(a.why||"")}}}
+catch(e){S.chat.push({r:"e",q:text})}
+V.busy=false;save();view()}
+function profileForm(first){const p=S.profile;return `<div class="col"><h1>${first?"Welcome. Let’s set you up.":"Profile"}</h1><p class="mu">${first?"A few preferences so answers fit you. You can change or delete everything later.":"Preferences used to shape answers."}</p><form data-f="profile"><label for="pn">Name</label><input id="pn" name="name" value="${esc(p.name)}"><label for="ps">Communication style</label><select id="ps" name="style">${["concise","balanced","detailed"].map(x=>`<option ${p.style==x?"selected":""}>${x}</option>`).join("")}</select><label for="pg">Goals</label><textarea id="pg" name="goals" rows="3">${esc(p.goals)}</textarea><label for="pt">Timezone</label><input id="pt" name="tz" value="${esc(p.tz)}"><div class="row"><div class="grow"><label for="q1">Quiet hours start</label><input id="q1" type="time" name="qs" value="${p.qs}"></div><div class="grow"><label for="q2">Quiet hours end</label><input id="q2" type="time" name="qe" value="${p.qe}"></div></div><div class="row" style="margin-top:16px"><button class="btn pri">${first?"Get started":"Save"}</button></div></form>${first?"":`<h4>Theme</h4><div class="row">${["auto","light","dark"].map(t=>`<button class="btn" data-a="theme" data-i="${t}" aria-pressed="${S.theme==t}">${t}</button>`).join("")}</div><h4>Your data</h4><button class="btn" data-a="reset">${V.reset?"Click again to erase everything":"Erase all data"}</button>`}</div>`}
+function msgHTML(m,i,last){if(m.r=="u")return `<div class="msg u">${esc(m.t)}</div>`;
+if(m.r=="s")return `<div class="note">${esc(m.t)}</div>`;
+if(m.r=="e")return `<div class="note" role="alert">The request failed. Your message is still here. <button class="btn" data-a="retry" data-i="${i}">Try again</button></div>`;
+if(m.r=="o")return `<div class="note"><b>Out of context</b> for this project — want to start a separate topic?<div class="chips"><button data-a="newtopic" data-i="${i}">New topic</button><button data-a="dismiss" data-i="${i}">Continue project</button></div></div>`;
+let h=`<div class="msg a">${md(m.t)}</div>`;
+if(m.mem)h+=`<div class="note">Remember this? “${esc(m.mem)}”<div class="chips"><button data-a="memsave" data-i="${i}">Save to memory</button><button data-a="memno" data-i="${i}">No thanks</button></div></div>`;
+if(last&&(m.f||m.c?.length))h+=`<div class="fu">${m.f?esc(m.f):""}<div class="chips">${(m.c||[]).map(c=>`<button data-a="chip" data-t="${esc(c)}">${esc(c)}</button>`).join("")}</div></div>`;
+if(last&&!m.x)h+=`<div class="chips" style="margin:-12px 0 24px"><button data-a="explain">Explain</button></div>`;return h}
+function chatPage(){const a=act();const empty=!S.chat.length;
+return `<div class="cw"><div class="pg" id="sc"><div class="col">${empty?`<h1>What’s on your mind${S.profile.name?", "+esc(S.profile.name):""}?</h1><p class="mu">Ask a question, explore an idea, or continue a project.</p><div class="chips">${["I’m thinking about starting a real estate project.","What should I consider before buying an apartment?"].map(c=>`<button data-a="chip" data-t="${esc(c)}">${esc(c)}</button>`).join("")}</div>`:S.chat.map((m,i)=>msgHTML(m,i,i==S.chat.length-1)).join("")}${V.busy?`<p class="mu" role="status">Thinking…</p>`:""}</div></div>
+<div class="comp"><div class="col"><form data-f="chat"><textarea id="in" aria-label="Message your AI" rows="2" placeholder="Ask anything or continue your work…"></textarea><div class="bar"><span class="mu sm">${a.length?"Project context: "+esc(a.map(t=>t.title).join(", ")):"No project context set"}</span><button class="send" aria-label="Send message" ${V.busy?"disabled":""}>↑</button></div></form></div></div></div>`}
+function memPage(){return `<div class="pg"><div class="col"><h2>Memory</h2><p class="mu">Only active memories shape answers. Nothing is saved without your approval.</p><form data-f="mem" class="row" style="margin-bottom:16px"><input class="grow" name="t" aria-label="New memory" placeholder="Add a preference or fact…"><button class="btn pri">Add</button></form>${S.mem.length?S.mem.map(m=>`<div class="card"><div class="row">${V.edit==m.id?`<input class="grow" id="ed" aria-label="Edit memory" value="${esc(m.t)}"><button class="btn pri" data-a="ms" data-i="${m.id}">Save</button>`:`<span class="grow" style="${m.on?"":"opacity:.5"}">${esc(m.t)}</span><button class="btn" data-a="mt" data-i="${m.id}" aria-pressed="${m.on}">${m.on?"Active":"Off"}</button><button class="btn" data-a="me" data-i="${m.id}">Edit</button><button class="btn" data-a="md" data-i="${m.id}">Delete</button>`}</div></div>`).join(""):`<p class="mu">No memories yet.</p>`}</div></div>`}
+function taskPage(){return `<div class="pg"><div class="col"><h2>Projects &amp; tasks</h2><p class="mu">Items marked “Use as context” tell your AI what the current project is.</p><form data-f="task"><input name="t" aria-label="Title" placeholder="e.g. Real estate project, Whitefield"><textarea name="n" rows="2" aria-label="Notes" placeholder="Notes (optional)" style="margin-top:8px"></textarea><div class="row" style="margin-top:8px"><button class="btn pri">Add</button></div></form><div style="height:16px"></div>${S.tasks.length?S.tasks.map(t=>`<div class="card"><div class="row"><span class="grow" style="${t.done?"text-decoration:line-through;opacity:.6":""}"><b>${esc(t.title)}</b>${t.n?`<br><span class="mu">${esc(t.n)}</span>`:""}</span><button class="btn" data-a="tc" data-i="${t.id}" aria-pressed="${t.on}">${t.on?"In context":"Use as context"}</button><button class="btn" data-a="td" data-i="${t.id}">${t.done?"Reopen":"Done"}</button><button class="btn" data-a="tx" data-i="${t.id}">Delete</button></div></div>`).join(""):`<p class="mu">Nothing here yet.</p>`}</div></div>`}
+function inboxPage(){const p=S.profile;return `<div class="pg"><div class="col"><h2>Inbox</h2><p class="mu">Briefings are created only when you ask. Quiet hours: ${p.qs}–${p.qe}.</p><div class="tabs"><button class="btn" data-a="tab" data-i="b" aria-pressed="${V.tab=="b"}">Briefings</button><button class="btn" data-a="tab" data-i="l" aria-pressed="${V.tab=="l"}">Activity</button></div>${V.tab=="b"?`<div class="row" style="margin-bottom:16px"><button class="btn pri" data-a="gen" ${V.busy?"disabled":""}>${V.busy?"Working…":"Create briefing"}</button><span class="mu" role="status">${esc(V.msg)}</span></div>${S.notes.length?S.notes.map(n=>`<div class="card"><b>${esc(n.t)}</b><p style="margin:4px 0 8px">${esc(n.b)}</p><div class="row"><button class="btn" data-a="vote" data-i="${n.id}" data-v="up" aria-pressed="${n.v=="up"}">Useful</button><button class="btn" data-a="vote" data-i="${n.id}" data-v="down" aria-pressed="${n.v=="down"}">Not useful</button><button class="btn" data-a="nx" data-i="${n.id}">Dismiss</button></div></div>`).join(""):`<p class="mu">No briefings yet.</p>`}`:(S.log.length?S.log.map(l=>`<div class="card sm"><span class="mu">${new Date(l.t).toLocaleString()}</span><br>${esc(l.a)}</div>`).join(""):`<p class="mu">No activity yet.</p>`)}</div></div>`}
+function modalHTML(){const m=V.modal;if(!m)return"";let b;
+if(m.type=="send_message")b=`<h2>Send this message?</h2><p class="mu">Nothing is sent until you approve this exact version.</p><dl><dt>Action</dt><dd>Send a message</dd><dt>Recipient</dt><dd>${m.edit?`<input id="mto" aria-label="Recipient" value="${esc(m.to)}">`:esc(m.to)}</dd><dt>Content</dt><dd>${m.edit?`<textarea id="mbd" aria-label="Message" rows="5">${esc(m.body)}</textarea>`:`<div class="draft">${esc(m.body)}</div>`}</dd><dt>Consequence</dt><dd>The recipient gets exactly this text. This prototype only simulates sending.</dd></dl><div class="row">${m.edit?`<button class="btn" data-a="rev">Review changes</button>`:`<button class="btn" data-a="edit">Edit draft</button>`}<button class="btn" data-a="cancel">Cancel</button><button class="btn pri" data-a="approve" ${m.edit?"disabled":""}>Approve and send</button></div>`;
+else b=`<h2>Allow access?</h2><p>Your AI is asking to look at: <b>${esc(m.source)}</b></p><p class="mu">Why: ${esc(m.why)||"not stated"}</p><p class="mu">Only for this request. This prototype has no connectors, so nothing would actually be read.</p><div class="row"><button class="btn" data-a="cancel">Deny</button><button class="btn pri" data-a="approve">Allow once</button></div>`;
+return `<div class="ov"><div class="modal" role="dialog" aria-modal="true" aria-label="Confirmation required">${b}</div></div>`}
+const NAV=[["chat","Chat"],["memory","Memory"],["tasks","Projects"],["inbox","Inbox"],["profile","Profile"]];
+function view(){const k=$("#in")?.value||"",f=document.activeElement?.id=="in",r=$("#root");
+document.documentElement.dataset.theme=S.theme=="auto"?"":S.theme;if(!S.theme||S.theme=="auto")document.documentElement.removeAttribute("data-theme");
+if(!S.profile.done){r.innerHTML=`<main style="height:100%;overflow:auto;padding:32px 16px">${profileForm(true)}</main>`;return}
+const P={chat:chatPage,memory:memPage,tasks:taskPage,inbox:inboxPage,profile:()=>`<div class="pg">${profileForm(false)}</div>`};
+r.innerHTML=`<div class="app">${V.nav?`<button class="scrim" data-a="menu" aria-label="Close navigation"></button>`:""}<aside class="${V.nav?"open":""}"><div class="logo">Your AI</div>${NAV.map(([i,l])=>`<button class="nav" data-a="nav" data-i="${i}" ${V.page==i?'aria-current="page"':""}>${l}</button>`).join("")}</aside><main><header><button class="btn menu" data-a="menu" aria-label="Open navigation">Menu</button>${NAV.find(n=>n[0]==V.page)[1]}<span class="sp"></span>${V.page=="chat"?`<button class="btn" data-a="newchat">New chat</button>`:""}</header>${P[V.page]()}</main></div>${modalHTML()}`;
+const i=$("#in");if(i){i.value=k;if(f)i.focus()}const s=$("#sc");if(s)s.scrollTop=s.scrollHeight}
+const A={nav:b=>{V.page=b.dataset.i;V.nav=false;view()},menu:()=>{V.nav=!V.nav;view()},chip:b=>send(b.dataset.t),explain:()=>send("explain"),
+newchat:()=>{S.chat=[];S.open=false;save();view()},newtopic:(b,i)=>{const q=S.chat[i].q;S.chat=[];S.open=true;send(q)},dismiss:(b,i)=>{S.chat.splice(i,1);view()},
+retry:(b,i)=>{const q=S.chat[i].q;S.chat.splice(i-1,2);send(q)},
+memsave:(b,i)=>{const m=S.chat[i];S.mem.push({id:uid(),t:m.mem,on:true});log("Saved memory: "+m.mem);m.mem="";save();view()},memno:(b,i)=>{S.chat[i].mem="";view()},
+mt:(b,i)=>{const m=S.mem.find(x=>x.id==i);m.on=!m.on;save();view()},me:(b,i)=>{V.edit=i;view()},ms:(b,i)=>{const m=S.mem.find(x=>x.id==i),v=$("#ed").value.trim();if(v){m.t=v;log("Edited memory")}V.edit=null;save();view()},
+md:(b,i)=>{S.mem=S.mem.filter(x=>x.id!=i);log("Deleted a memory");save();view()},
+tc:(b,i)=>{const t=S.tasks.find(x=>x.id==i);t.on=!t.on;save();view()},td:(b,i)=>{const t=S.tasks.find(x=>x.id==i);t.done=!t.done;save();view()},tx:(b,i)=>{S.tasks=S.tasks.filter(x=>x.id!=i);save();view()},
+tab:b=>{V.tab=b.dataset.i;view()},vote:b=>{const n=S.notes.find(x=>x.id==b.dataset.i);n.v=n.v==b.dataset.v?null:b.dataset.v;save();view()},nx:(b,i)=>{S.notes=S.notes.filter(x=>x.id!=i);save();view()},
+gen:async()=>{V.busy=true;V.msg="";view();try{const r=await ai(BR+"\n\n"+ctx()),it=(r.items||[]).slice(0,3);it.forEach(x=>S.notes.unshift({id:uid(),t:String(x.title||""),b:String(x.body||""),v:null}));V.msg=it.length?"":"Nothing useful to suggest yet. Add a project or memory first.";log("Created a briefing")}catch(e){V.msg="Couldn’t create a briefing right now."}V.busy=false;save();view()},
+theme:b=>{S.theme=b.dataset.i;save();view()},reset:()=>{if(!V.reset){V.reset=true;view();return}S=JSON.parse(JSON.stringify(D));V.reset=false;V.page="chat";save();view()},
+edit:()=>{V.modal.edit=true;V.modal.h=null;view()},rev:()=>{const m=V.modal;m.to=$("#mto").value;m.body=$("#mbd").value;m.edit=false;m.h=hash(m.to+"|"+m.body);view()},
+cancel:()=>{const m=V.modal;log((m.type=="send_message"?"Cancelled message to ":"Denied access to ")+(m.to||m.source));S.chat.push({r:"s",t:"Cancelled. Nothing was done."});V.modal=null;save();view()},
+approve:()=>{const m=V.modal;if(m.type=="send_message"){if(m.h!==hash(m.to+"|"+m.body))return;log(`Approved message to ${m.to} (version ${m.h}), simulated`);S.chat.push({r:"s",t:`Approved: message to ${m.to}. Demo only, nothing was actually sent.`})}else{log("Allowed one-time access to "+m.source+" (no connector, nothing read)");S.chat.push({r:"s",t:`Access to ${m.source} allowed once. This prototype has no connectors, so nothing was read.`})}V.modal=null;save();view()}};
+document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b&&A[b.dataset.a])A[b.dataset.a](b,b.dataset.i)});
+document.addEventListener("keydown",e=>{if(e.key=="Escape"&&V.modal)A.cancel();if(e.target.id=="in"&&e.key=="Enter"&&!e.shiftKey){e.preventDefault();const t=e.target.value;e.target.value="";send(t)}});
+document.addEventListener("submit",e=>{e.preventDefault();const f=e.target,k=f.dataset.f,d=Object.fromEntries(new FormData(f));
+if(k=="chat"){const t=$("#in").value;$("#in").value="";send(t)}
+else if(k=="profile"){const first=!S.profile.done;S.profile={...S.profile,...d,done:true};if(first){S.mem.push({id:uid(),t:`Prefers ${d.style} answers`,on:true});if(d.goals.trim())S.mem.push({id:uid(),t:"Goals: "+d.goals.trim(),on:true});log("Completed onboarding")}else log("Updated profile");save();view()}
+else if(k=="mem"&&d.t.trim()){S.mem.push({id:uid(),t:d.t.trim(),on:true});log("Added a memory");save();view()}
+else if(k=="task"&&d.t.trim()){S.tasks.push({id:uid(),title:d.t.trim(),n:d.n.trim(),on:true,done:false});log("Added task: "+d.t.trim());save();view()}});
+view();
+load().then(d=>{if(d){S={...JSON.parse(JSON.stringify(D)),...d};view()}});
+</script></body></html>
